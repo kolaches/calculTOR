@@ -1,523 +1,304 @@
-<!--<!DOCTYPE html>-->
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Моя геймерская визитка</title>
+    <!--
+      ⚙️ КАК ИСПОЛЬЗОВАТЬ
+      1) Положите свою фотографию рядом с этим файлом и замените 'your-photo.jpg' ниже.
+      2) Заполните имя, ссылки и цифры в отмеченных местах.
+      3) Нужен только HTML и CSS — никакого JS.
+    -->
+    <style>
+        :root{
+          --bg-1: #0b0f1a;
+          --bg-2: #0d0b16;
+          --text: #eaeaf3;
+          --muted: #a9adc1;
+          --accent-1: #ffae00; /* CS gold */
+          --accent-2: #c62828; /* Dota red */
+          --glass: rgba(255,255,255,.06);
+          --glass-strong: rgba(255,255,255,.12);
+          --card: rgba(12,16,30,.7);
+          --stroke: rgba(255,255,255,.12);
+          --maxw: 1100px;
+          --radius: 18px;
+          --shadow: 0 10px 30px rgba(0,0,0,.45);
+        }
+
+        *{box-sizing:border-box}
+        html,body{height:100%}
+        body{
+          margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+          color:var(--text); background: radial-gradient(1200px 800px at 70% -10%, rgba(255,174,0,.15), transparent 60%),
+                              radial-gradient(900px 600px at 10% -20%, rgba(198,40,40,.18), transparent 60%),
+                              linear-gradient(180deg, var(--bg-1), var(--bg-2));
+          background-attachment: fixed;
+        }
+
+        /* декоративные неоновые пятна */
+        .orbs::before, .orbs::after{
+          content:""; position:fixed; inset:0; pointer-events:none; mix-blend-mode:screen; opacity:.35;
+          background: radial-gradient(600px 300px at 85% 15%, rgba(255,174,0,.25), transparent 55%);
+          filter: blur(20px);
+        }
+        .orbs::after{background: radial-gradient(800px 350px at 15% 10%, rgba(198,40,40,.28), transparent 60%);
+        }
+
+        /* лёгкие сканлайны для игрового вайба */
+        .scanlines{position:fixed; inset:0; pointer-events:none; opacity:.08;
+          background-image: repeating-linear-gradient( to bottom, rgba(255,255,255,.12), rgba(255,255,255,.12) 1px, transparent 1px, transparent 3px);
+        }
+
+        header{
+          position:sticky; top:0; z-index:2; backdrop-filter: blur(8px);
+          background: linear-gradient(to bottom, rgba(10,12,22,.8), rgba(10,12,22,.35));
+          border-bottom: 1px solid var(--stroke);
+        }
+
+        .nav{max-width:var(--maxw); margin:0 auto; padding:14px 22px; display:flex; align-items:center; justify-content:space-between;}
+        .brand{display:flex; gap:12px; align-items:center; font-weight:700; letter-spacing:.4px}
+
+        /* минималистичный логотип — прицел + щит */
+        .mark{width:34px; height:34px; position:relative; border-radius:10px;
+          background: radial-gradient(circle at 50% 50%, rgba(255,174,0,.25), rgba(255,174,0,.05) 45%, transparent 46%),
+                      linear-gradient(135deg, rgba(198,40,40,.45), rgba(255,174,0,.45));
+          box-shadow: inset 0 0 0 2px rgba(255,255,255,.12), 0 6px 18px rgba(0,0,0,.3);
+        }
+        .mark:before,.mark:after{content:""; position:absolute; inset:0; margin:auto; border-radius:50%;}
+        .mark:before{width:22px;height:22px;border:2px solid rgba(255,255,255,.8); filter: drop-shadow(0 0 6px rgba(255,174,0,.6));}
+        .mark:after{width:2px;height:70%; background:rgba(255,255,255,.85); box-shadow: 0 0 6px rgba(255,174,0,.7), 0 0 0 2px transparent;}
+        .brand .title{font-size:15px; line-height:1.1}
+        .brand .sub{display:block; font-weight:500; color:var(--muted); font-size:12px; margin-top:2px}
+
+        .links{display:flex; gap:12px; align-items:center; flex-wrap:wrap}
+        .pill{--glow:var(--accent-1); padding:8px 12px; border-radius:999px; font-size:14px; text-decoration:none; color:var(--text);
+          background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+          border:1px solid var(--stroke);
+          box-shadow: inset 0 0 18px rgba(255,255,255,.05), 0 0 14px rgba(255,174,0,.15);
+          transition: .2s ease;
+        }
+        .pill:hover{transform: translateY(-1px); box-shadow: 0 0 24px var(--glow), inset 0 0 18px rgba(255,255,255,.05)}
+        .pill[data-variant="red"]{--glow:var(--accent-2)}
+
+        main{max-width:var(--maxw); margin:0 auto; padding:48px 22px 80px}
+
+        .hero{display:grid; grid-template-columns: 1.1fr 1.3fr; gap:28px; align-items:center}
+
+        /* аватар с геймерским декором */
+        .avatar-wrap{position:relative; aspect-ratio: 1/1; max-width: 420px; justify-self:center}
+        .avatar{
+          position:relative; width:100%; height:100%; border-radius:28px;
+          background-image: url('your-photo.jpg'); /* ← замените на файл с вашей фотографией */
+          background-size: cover; background-position:center;
+          box-shadow: var(--shadow), 0 0 0 2px rgba(255,255,255,.08) inset;
+          overflow:hidden;
+          border: 1px solid var(--stroke);
+          isolation:isolate;
+        }
+        /* перекрёстие */
+        .avatar::after{content:""; position:absolute; inset:0; margin:auto; width:70%; height:70%; border-radius:50%;
+          border:2px solid rgba(255,255,255,.9); box-shadow:0 0 18px rgba(255,174,0,.6);
+          animation: pulse 2.4s ease-in-out infinite;
+        }
+        .avatar::before{content:""; position:absolute; inset:0; margin:auto; width:2px; height:85%; background:rgba(255,255,255,.9);
+          box-shadow: 0 0 12px rgba(255,174,0,.7);
+        }
+        @keyframes pulse{0%,100%{transform:scale(.98); opacity:.9}50%{transform:scale(1.02); opacity:1}}
+
+        .badge-live{position:absolute; top:14px; left:14px; padding:6px 10px; font-size:12px; font-weight:700; letter-spacing:.4px; text-transform:uppercase;
+          background: linear-gradient(90deg, var(--accent-2), #e44);
+          border:1px solid rgba(255,255,255,.15); border-radius:999px; box-shadow:0 0 18px rgba(198,40,40,.6);
+        }
+
+        .glow-border{position:absolute; inset:-1px; border-radius:28px; pointer-events:none;
+          --grad: conic-gradient(from 0deg at 50% 50%, var(--accent-1), var(--accent-2), var(--accent-1));
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          padding:2px; background:var(--grad);
+          -webkit-mask-composite: xor; mask-composite: exclude; filter: blur(6px) saturate(1.2); opacity:.6;
+          animation: rotate 6s linear infinite;
+        }
+        @keyframes rotate {to{transform: rotate(360deg)}}
+
+        .hero-copy h1{font-size: clamp(28px, 4vw, 46px); margin:0 0 10px; text-wrap:balance;
+          text-shadow: 0 0 24px rgba(255,174,0,.3), 0 0 24px rgba(198,40,40,.25);
+        }
+        .hero-copy p.lead{margin:0 0 18px; color:var(--muted); font-size: clamp(14px, 2.1vw, 18px)}
+
+        .tags{display:flex; gap:10px; flex-wrap:wrap; margin:14px 0 22px}
+        .tag{font-size:12px; text-transform:uppercase; letter-spacing:.5px; padding:7px 10px; border-radius:999px;
+          background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+          border:1px solid var(--stroke);
+        }
+        .tag[data-variant="gold"]{border-color: rgba(255,174,0,.55); box-shadow: inset 0 0 18px rgba(255,174,0,.12)}
+        .tag[data-variant="red"]{border-color: rgba(198,40,40,.55); box-shadow: inset 0 0 18px rgba(198,40,40,.12)}
+
+        .cta{display:flex; gap:12px; flex-wrap:wrap}
+        .btn{--glow: var(--accent-1); padding:12px 16px; border-radius:12px; border:1px solid var(--stroke); color:var(--text); text-decoration:none; font-weight:600;
+          background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)); box-shadow: 0 10px 22px rgba(0,0,0,.3);
+          transition: .22s ease;
+        }
+        .btn:hover{transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,0,0,.38), 0 0 24px var(--glow)}
+        .btn[data-variant="secondary"]{--glow: var(--accent-2)}
+
+        section{margin-top:48px}
+        .section-title{display:flex; align-items:center; gap:10px; margin:0 0 16px; font-size:14px; text-transform:uppercase; letter-spacing:.5px; color:var(--muted)}
+        .bar{width:44px; height:2px; background: linear-gradient(90deg, var(--accent-1), var(--accent-2)); border-radius:2px}
+
+        .about, .setup, .contact{background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); border:1px solid var(--stroke); border-radius:var(--radius); padding:22px; box-shadow: var(--shadow)}
+
+        .about p{margin:0; color:var(--text); line-height:1.7}
+
+        .stats{display:grid; grid-template-columns: repeat(4, 1fr); gap:16px}
+        .card{background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); border:1px solid var(--stroke); border-radius:14px; padding:16px; box-shadow: var(--shadow)}
+        .num{font-size:28px; font-weight:800; margin-bottom:4px}
+        .mut{color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.4px}
+
+        .setup-grid{display:grid; grid-template-columns: repeat(3, 1fr); gap:14px}
+        .li{padding:14px; border:1px solid var(--stroke); border-radius:12px; background: rgba(255,255,255,.03)}
+        .li b{display:block; margin-bottom:6px}
+
+        .contact .rows{display:grid; gap:10px}
+        .contact a{color:var(--text)}
+
+        footer{max-width:var(--maxw); margin:28px auto 80px; padding:0 22px; color:var(--muted); font-size:13px}
+
+        /* адаптив */
+        @media (max-width: 980px){
+          .hero{grid-template-columns: 1fr; gap:22px}
+          .avatar-wrap{max-width: 380px}
+          .stats{grid-template-columns: repeat(2, 1fr)}
+          .setup-grid{grid-template-columns: repeat(2, 1fr)}
+        }
+        @media (max-width: 560px){
+          .stats{grid-template-columns: 1fr}
+          .setup-grid{grid-template-columns: 1fr}
+          .links{display:none}
+        }
+    </style>
+</head>
+<body>
+<div class="orbs"></div>
+<div class="scanlines"></div>
+<header>
+    <div class="nav">
+        <div class="brand">
+            <div class="mark" aria-hidden="true"></div>
+            <div class="title-wrap">
+                <div class="title">Ваш Никнейм</div>
+                <span class="sub">CS & Dota игрок</span>
+            </div>
+        </div>
+        <nav class="links" aria-label="Социальные ссылки">
+            <!-- Замените # на ваши ссылки -->
+            <a class="pill" href="https://store.steampowered.com/login/" target="_blank" rel="noopener">🎮 Steam</a>
+            <a class="pill" data-variant="red" href="https://www.twitch.tv/login" target="_blank" rel="noopener">📺 Twitch</a>
+            <a class="pill" href="https://discord.com/login" target="_blank" rel="noopener">💬 Discord</a>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <section class="hero">
+        <div class="avatar-wrap">
+            <div class="avatar" role="img" aria-label="Фотография игрока">
+                <div class="badge-live">online</div>
+            </div>
+            <div class="glow-border"></div>
+        </div>
+
+        <div class="hero-copy">
+            <h1>Привет! Я <span style="color:var(--accent-1)">Ваше Имя</span> — живу игрой.</h1>
+            <p class="lead">Много играю в <b>Counter‑Strike</b> и <b>Dota 2</b>. Люблю жёсткий клатч, командную тактику и чистую коммуникацию. Ищу единомышленников для стаков, миксов и совместных проектов.</p>
+
+            <div class="tags">
+                <span class="tag" data-variant="gold">AWP / Rifler</span>
+                <span class="tag" data-variant="red">Support / Roaming</span>
+                <span class="tag">Shotcaller</span>
+                <span class="tag">RU / EN</span>
+            </div>
+
+            <div class="cta">
+                <a class="btn" href="#contact">Связаться</a>
+                <a class="btn" data-variant="secondary" href="#setup">Мой сетап</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="about" aria-labelledby="about-title">
+        <div class="section-title"><span class="bar"></span><span id="about-title">Обо мне</span></div>
+        <p>Коротко о главном: дисциплина, уважение к тиммейтам и постоянный гринд. <br/>Играю с 2014 года, люблю анализ демок и строить плейбуки под команду. В свободное время помогаю друзьям настраивать прицелы, сенсу и бинды.</p>
+    </section>
+
+    <section class="stats" aria-labelledby="stats-title">
+        <div class="section-title" style="grid-column:1/-1"><span class="bar"></span><span id="stats-title">Статистика</span></div>
+        <!-- Замените показатели на свои реальные -->
+        <div class="card"><div class="num">3 200+</div><div class="mut">часы в CS</div></div>
+        <div class="card"><div class="num">4 600</div><div class="mut">MMR Dota 2</div></div>
+        <div class="card"><div class="num">1.18</div><div class="mut">K/D (CS)</div></div>
+        <div class="card"><div class="num">57%</div><div class="mut">Winrate (посл. 100)</div></div>
+    </section>
+
+    <section id="setup" class="setup" aria-labelledby="setup-title">
+        <div class="section-title"><span class="bar"></span><span id="setup-title">Сетап</span></div>
+        <div class="setup-grid">
+            <div class="li"><b>Мышь</b> Logitech G Pro X Superlight</div>
+            <div class="li"><b>Клава</b> SteelSeries Apex Pro</div>
+            <div class="li"><b>Гарнитура</b> HyperX Cloud II</div>
+            <div class="li"><b>Монитор</b> 24" 240 Гц</div>
+            <div class="li"><b>Микрофон</b> FIFINE / Blue</div>
+            <div class="li"><b>Пад</b> Artisan / Zowie G‑SR</div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact" aria-labelledby="contact-title">
+        <div class="section-title"><span class="bar"></span><span id="contact-title">Контакты</span></div>
+        <div class="rows">
+            <!-- Обновите контакты под себя -->
+            <div>📨 Email: <a href="djudosoej247hdh@outlook.com">you@example.com</a></div>
+            <div>🎮 Steam: <a href="#" target="_blank" rel="noopener">steamcommunity.com/id/</a></div>
+            <div>💬 Discord: <span>nwes._er</span></div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    © <span id="y">2025</span> Ваш Никнейм — GGWP ✨
+</footer>
+</body>
+</html>
+
+
+<!--<!doctype html>-->
 <!--<html lang="ru">-->
-<!--<head>-->
+<!--  <head>-->
 <!--    <meta charset="utf-8" />-->
 <!--    <meta name="viewport" content="width=device-width, initial-scale=1" />-->
-<!--    <title>Gravity Defied — Vanilla JS Prototype</title>-->
-<!--    <style>-->
-<!--        :root {-->
-<!--            &#45;&#45;bg: #0e0f14;-->
-<!--            &#45;&#45;panel: #161922;-->
-<!--            &#45;&#45;fg: #e8ecf1;-->
-<!--            &#45;&#45;accent: #7dd3fc;-->
-<!--            &#45;&#45;muted: #9aa3b2;-->
-<!--            &#45;&#45;good: #22c55e;-->
-<!--            &#45;&#45;bad: #ef4444;-->
-<!--        }-->
-<!--        * { box-sizing: border-box; }-->
-<!--        html, body {-->
-<!--            height: 100%;-->
-<!--            margin: 0;-->
-<!--            background: radial-gradient(1200px 700px at 70% -10%, #1a2030 0%, #0e0f14 50%, #0b0c10 100%);-->
-<!--            color: var(&#45;&#45;fg);-->
-<!--            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";-->
-<!--        }-->
-<!--        #hud {-->
-<!--            position: fixed; inset: 0 0 auto 0; display: flex; align-items: center; gap: 12px;-->
-<!--            padding: 12px 14px; pointer-events: none; user-select: none;-->
-<!--            background: linear-gradient(180deg, rgba(0,0,0,.28), transparent);-->
-<!--        }-->
-<!--        #hud .chip { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08); backdrop-filter: blur(4px);-->
-<!--            padding: 6px 10px; border-radius: 999px; font-size: 12px; line-height: 1; pointer-events: auto;}-->
-<!--        #hud .chip strong { color: var(&#45;&#45;accent); }-->
-
-<!--        #overlay { position: fixed; inset: 0; display: grid; place-items: center; padding: 24px; }-->
-<!--        #overlay .card { width: min(680px, 92vw); border-radius: 16px; background: var(&#45;&#45;panel); border: 1px solid rgba(255,255,255,.08); padding: 20px 22px; box-shadow: 0 10px 40px rgba(0,0,0,.45); }-->
-<!--        #overlay h1 { margin: 0 0 6px; font-size: 22px; letter-spacing: .2px; }-->
-<!--        #overlay p { margin: 4px 0; color: var(&#45;&#45;muted); }-->
-<!--        #overlay code { background: rgba(255,255,255,.08); padding: 2px 6px; border-radius: 6px; }-->
-<!--        #overlay .row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px; }-->
-<!--        #overlay .btn { appearance: none; border: 1px solid rgba(255,255,255,.12); background: #0f1220; color: #dfe7f3; padding: 10px 14px; border-radius: 12px; cursor: pointer; }-->
-<!--        #overlay .btn.primary { background: linear-gradient(180deg, #1f2a44, #162032); border-color: #2b3655; }-->
-
-<!--        canvas { display: block; width: 100vw; height: 100vh; }-->
-
-<!--        /* Mobile controls */-->
-<!--        #controls { position: fixed; inset: auto 0 0 0; display: flex; justify-content: space-between; gap: 10px; padding: 12px; pointer-events: none; }-->
-<!--        .pad { display: grid; grid-template-columns: repeat(2, 70px); grid-template-rows: repeat(2, 70px); gap: 10px; }-->
-<!--        .btn {-->
-<!--            pointer-events: auto; user-select: none; -webkit-user-select: none;-->
-<!--            width: 70px; height: 70px; display: grid; place-items: center; border-radius: 16px; border: 1px solid rgba(255,255,255,.09);-->
-<!--            background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.22)); box-shadow: 0 8px 24px rgba(0,0,0,.25);-->
-<!--            color: #dbe5f2; font-weight: 600; letter-spacing: .3px;-->
-<!--            touch-action: none;-->
-<!--        }-->
-<!--        .btn:active { transform: translateY(1px); }-->
-<!--        .btn.small { width: 70px; height: 70px; }-->
-<!--        .btn.full { grid-column: span 2; }-->
-
-<!--        @media (min-width: 900px) { #controls { display: none; } }-->
-
-<!--        .toast { position: fixed; inset: auto auto 80px 50%; transform: translateX(-50%);-->
-<!--            background: rgba(15,18,32,.8); border: 1px solid rgba(255,255,255,.13); color: var(&#45;&#45;fg); padding: 12px 16px; border-radius: 12px; box-shadow: 0 6px 30px rgba(0,0,0,.35);-->
-<!--            font-size: 14px; display: none; }-->
-<!--        .toast.show { display: block; }-->
-<!--    </style>-->
-<!--</head>-->
-<!--<body>-->
-<!--<canvas id="game"></canvas>-->
-
-<!--<div id="hud">-->
-<!--    <div class="chip">Скорость: <strong id="speed">0</strong> м/с</div>-->
-<!--    <div class="chip">Время: <strong id="time">0.0</strong> c</div>-->
-<!--    <div class="chip">Пройдено: <strong id="progress">0%</strong></div>-->
-<!--    <div class="chip" style="display:none" id="status"></div>-->
-<!--</div>-->
-
-<!--<div id="overlay" hidden>-->
-<!--    <div class="card">-->
-<!--        <h1>Gravity Defied (Vanilla JS)</h1>-->
-<!--        <p>Управляй мотоциклом, сохраняя баланс и преодолевая рельеф. Физика — на Verlet, колёса сталкиваются с полилинией грунта.</p>-->
-<!--        <p><strong>Клавиши:</strong> <code>→</code> газ, <code>←</code> тормоз/реверс, <code>W</code>/<code>S</code> или <code>↑</code>/<code>↓</code> — наклон, <code>R</code> — рестарт, <code>P</code> — пауза.</p>-->
-<!--        <div class="row">-->
-<!--            <button class="btn primary" id="startBtn">Старт</button>-->
-<!--            <button class="btn" id="resetBtn">Рестарт уровня</button>-->
-<!--            <button class="btn" id="pauseBtn">Пауза</button>-->
-<!--        </div>-->
+<!--    <title>Учебный CI/CD – Калькулятор</title>-->
+<!--    <link rel="stylesheet" href="styles.css" />-->
+<!--  </head>-->
+<!--  <body>-->
+<!--    <main>-->
+<!--      <h1>Калькулятор: a + b</h1>-->
+<!--      <form id="calc-form">-->
+<!--        <label>a <input id="a" type="number" value="2" /></label>-->
+<!--        <label>b <input id="b" type="number" value="3" /></label>-->
+<!--        <button type="submit">Сложить</button>-->
+<!--      </form>-->
+<!--      <p id="result">Результат: —</p>-->
+<!--    </main>-->
+<!--    <div class="calc-container">-->
+<!--        <h2>Калькулятор: a × b</h2>-->
+<!--        <label for="a2">a</label>-->
+<!--        <input type="number" id="a2">-->
+<!--        <label for="b2">b</label>-->
+<!--        <input type="number" id="b2">-->
+<!--        <button id="multiply-btn" type="button">Умножить</button>-->
+<!--        <p><strong>Результат:</strong> <span id="result2">—</span></p>-->
 <!--    </div>-->
-<!--</div>-->
-
-<!--<div id="controls">-->
-<!--    <div class="pad">-->
-<!--        <div class="btn small" data-hold="leanBack">⟲</div>-->
-<!--        <div class="btn small" data-hold="leanFwd">⟳</div>-->
-<!--        <div class="btn full" data-hold="brake">⟸ Тормоз</div>-->
-<!--    </div>-->
-<!--    <div class="pad">-->
-<!--        <div class="btn full" data-hold="throttle">Газ ⟹</div>-->
-<!--        <div class="btn full" data-tap="reset">Рестарт</div>-->
-<!--    </div>-->
-<!--</div>-->
-
-<!--<div class="toast" id="toast"></div>-->
-
-<!--<script>-->
-<!--    ;(() => {-->
-<!--        // ===== Helpers =====-->
-<!--        const clamp = (v, a, b) => Math.max(a, Math.min(b, v));-->
-<!--        const lerp = (a,b,t) => a + (b-a)*t;-->
-
-<!--        class Vec2 {-->
-<!--            constructor(x=0,y=0){ this.x=x; this.y=y; }-->
-<!--            clone(){ return new Vec2(this.x,this.y); }-->
-<!--            set(x,y){ this.x=x; this.y=y; return this; }-->
-<!--            add(v){ this.x+=v.x; this.y+=v.y; return this; }-->
-<!--            sub(v){ this.x-=v.x; this.y-=v.y; return this; }-->
-<!--            scale(s){ this.x*=s; this.y*=s; return this; }-->
-<!--            dot(v){ return this.x*v.x + this.y*v.y; }-->
-<!--            len(){ return Math.hypot(this.x,this.y); }-->
-<!--            norm(){ const l=this.len()||1; this.x/=l; this.y/=l; return this; }-->
-<!--            perp(){ return new Vec2(-this.y, this.x); }-->
-<!--            static add(a,b){ return new Vec2(a.x+b.x, a.y+b.y); }-->
-<!--            static sub(a,b){ return new Vec2(a.x-b.x, a.y-b.y); }-->
-<!--            static scale(a,s){ return new Vec2(a.x*s, a.y*s); }-->
-<!--        }-->
-
-<!--        class Particle {-->
-<!--            constructor(x,y){ this.pos=new Vec2(x,y); this.prev=new Vec2(x,y); this.acc=new Vec2(0,0); this.radius=0.2; this.onGround=false; this.groundTangent=new Vec2(1,0); }-->
-<!--            addForce(ax,ay){ this.acc.x+=ax; this.acc.y+=ay; }-->
-<!--            integrate(dt){ const vx=this.pos.x-this.prev.x; const vy=this.pos.y-this.prev.y; this.prev.x=this.pos.x; this.prev.y=this.pos.y; this.pos.x += vx + this.acc.x*dt*dt; this.pos.y += vy + this.acc.y*dt*dt; this.acc.x=0; this.acc.y=0; this.onGround=false; }-->
-<!--            velocity(){ return new Vec2(this.pos.x-this.prev.x, this.pos.y-this.prev.y); }-->
-<!--            setVelocity(vx,vy){ this.prev.x = this.pos.x - vx; this.prev.y = this.pos.y - vy; }-->
-<!--        }-->
-
-<!--        class DistanceConstraint {-->
-<!--            constructor(a,b,rest,stiff=1){ this.a=a; this.b=b; this.rest=rest; this.stiff=stiff; }-->
-<!--            solve(){ const d = Vec2.sub(this.b.pos, this.a.pos); let L = d.len(); if(!L) return; const diff = (L - this.rest)/L; const corr = this.stiff * diff * 0.5; this.a.pos.x += d.x*corr; this.a.pos.y += d.y*corr; this.b.pos.x -= d.x*corr; this.b.pos.y -= d.y*corr; }-->
-<!--        }-->
-
-<!--        // ===== Terrain =====-->
-<!--        function buildTerrain() {-->
-<!--            // Generate a fun track from stitched segments-->
-<!--            const pts = [];-->
-<!--            let x=0; let y=0;-->
-<!--            function seg(dx, slope=0, wavAmp=0, wavLen=8){-->
-<!--                const steps = Math.max(2, Math.floor(dx));-->
-<!--                for(let i=1;i<=steps;i++){-->
-<!--                    const t=i/steps; const cx = x + dx*t; const base = y + slope*dx*t;-->
-<!--                    const wave = wavAmp ? Math.sin((cx)/wavLen*Math.PI*2)*wavAmp : 0;-->
-<!--                    pts.push([cx, base + wave]);-->
-<!--                }-->
-<!--                x += dx; y += slope*dx;-->
-<!--            }-->
-<!--            pts.push([x,y]);-->
-<!--            seg(25, 0.02, 0.4, 10);-->
-<!--            seg(12, 0.10, 0.0);-->
-<!--            seg(18, -0.08, 0.3, 7);-->
-<!--            seg(22, 0.00, 0.8, 6);-->
-<!--            seg(14, -0.12, 0.0);-->
-<!--            seg(16, 0.06, 0.2, 9);-->
-<!--            seg(18, 0.00, 0.0);-->
-<!--            seg(24, 0.04, 0.5, 8);-->
-<!--            seg(12, -0.18, 0.0);-->
-<!--            seg(22, 0.00, 0.0);-->
-<!--            // Finish platform-->
-<!--            for(let i=0;i<12;i++) pts.push([x + i*1.2, y]);-->
-<!--            return pts;-->
-<!--        }-->
-
-<!--        function closestPointOnSegment(ax,ay,bx,by,px,py){-->
-<!--            const abx = bx-ax, aby = by-ay; const apx = px-ax, apy = py-ay;-->
-<!--            const ab2 = abx*abx+aby*aby || 1e-9; let t = (apx*abx + apy*aby)/ab2; t = clamp(t, 0, 1);-->
-<!--            return { x: ax + abx*t, y: ay + aby*t, t, abx, aby };-->
-<!--        }-->
-
-<!--        // ===== Game state =====-->
-<!--        const canvas = document.getElementById('game');-->
-<!--        const ctx = canvas.getContext('2d');-->
-<!--        const dpr = Math.max(1, window.devicePixelRatio||1);-->
-
-<!--        let W=0,H=0; let paused=true; let crashed=false; let finished=false; let worldScale=55; // pixels per meter-->
-
-<!--        const keys = { left:false, right:false, up:false, down:false };-->
-<!--        const ui = {-->
-<!--            speedEl: document.getElementById('speed'), timeEl: document.getElementById('time'), progressEl: document.getElementById('progress'), statusEl: document.getElementById('status'),-->
-<!--            overlay: document.getElementById('overlay'), startBtn: document.getElementById('startBtn'), resetBtn: document.getElementById('resetBtn'), pauseBtn: document.getElementById('pauseBtn'), toast: document.getElementById('toast'),-->
-<!--        };-->
-
-<!--        const level = { points: buildTerrain() };-->
-<!--        const levelLength = level.points[level.points.length-1][0];-->
-
-<!--        // Bike setup (meters)-->
-<!--        const bike = {-->
-<!--            rear: new Particle(2, -1),-->
-<!--            front: new Particle(3.1, -1),-->
-<!--            seat: new Particle(2.4, -2.2),-->
-<!--            rearR: 0.32, frontR: 0.30,-->
-<!--            constraints: [],-->
-<!--            driveForce: 18, // N-ish -> turned into velocity impulse-->
-<!--            brakeForce: 13,-->
-<!--            leanImpulse: 0.35,-->
-<!--            maxSlopeSpeed: 22,-->
-<!--        };-->
-<!--        bike.rear.radius = bike.rearR; bike.front.radius = bike.frontR; bike.seat.radius = 0.18;-->
-
-<!--        const rest = {-->
-<!--            rf: distance(bike.rear.pos, bike.front.pos),-->
-<!--            rs: 1.25, // rear to seat-->
-<!--            fs: 1.25, // front to seat-->
-<!--        };-->
-
-<!--        function distance(a,b){ return Math.hypot(a.x-b.x,a.y-b.y); }-->
-
-<!--        function addConstraints(){-->
-<!--            bike.constraints = [-->
-<!--                new DistanceConstraint(bike.rear, bike.front, rest.rf, 0.9),-->
-<!--                new DistanceConstraint(bike.rear, bike.seat, rest.rs, 0.75), // a bit softer -> как подвеска-->
-<!--                new DistanceConstraint(bike.front, bike.seat, rest.fs, 0.75),-->
-<!--            ];-->
-<!--        }-->
-<!--        addConstraints();-->
-
-<!--        // Camera-->
-<!--        const cam = { x: 0, y: 0 };-->
-
-<!--        // Physics params-->
-<!--        const G = 18.0; // gravity m/s^2 (чуть выше для бодрости)-->
-<!--        const dt = 1/60; // fixed timestep-->
-<!--        const iterations = 10; // constraint solver iterations-->
-
-<!--        // ===== Input =====-->
-<!--        window.addEventListener('keydown', (e)=>{-->
-<!--            if(e.repeat) return;-->
-<!--            switch(e.code){-->
-<!--                case 'ArrowLeft': keys.left=true; break;-->
-<!--                case 'ArrowRight': keys.right=true; break;-->
-<!--                case 'ArrowUp': keys.up=true; break;-->
-<!--                case 'ArrowDown': keys.down=true; break;-->
-<!--                case 'KeyW': keys.up=true; break;-->
-<!--                case 'KeyS': keys.down=true; break;-->
-<!--                case 'KeyR': resetLevel(); break;-->
-<!--                case 'KeyP': togglePause(); break;-->
-<!--            }-->
-<!--        });-->
-<!--        window.addEventListener('keyup', (e)=>{-->
-<!--            switch(e.code){-->
-<!--                case 'ArrowLeft': keys.left=false; break;-->
-<!--                case 'ArrowRight': keys.right=false; break;-->
-<!--                case 'ArrowUp': keys.up=false; break;-->
-<!--                case 'ArrowDown': keys.down=false; break;-->
-<!--                case 'KeyW': keys.up=false; break;-->
-<!--                case 'KeyS': keys.down=false; break;-->
-<!--            }-->
-<!--        });-->
-
-<!--        // Touch UI-->
-<!--        function bindMobileControls(){-->
-<!--            const pad = document.getElementById('controls');-->
-<!--            pad.querySelectorAll('[data-hold]').forEach(btn=>{-->
-<!--                const kind = btn.getAttribute('data-hold');-->
-<!--                const on = () => setHold(kind, true);-->
-<!--                const off = () => setHold(kind, false);-->
-<!--                btn.addEventListener('touchstart', e=>{ e.preventDefault(); on(); });-->
-<!--                btn.addEventListener('touchend', off);-->
-<!--                btn.addEventListener('touchcancel', off);-->
-<!--                btn.addEventListener('mousedown', on);-->
-<!--                btn.addEventListener('mouseup', off);-->
-<!--                btn.addEventListener('mouseleave', off);-->
-<!--            });-->
-<!--            pad.querySelectorAll('[data-tap]').forEach(btn=>{-->
-<!--                const kind = btn.getAttribute('data-tap');-->
-<!--                btn.addEventListener('touchstart', e=>{ e.preventDefault(); tap(kind); });-->
-<!--                btn.addEventListener('click', ()=> tap(kind));-->
-<!--            });-->
-<!--        }-->
-<!--        function setHold(kind, val){-->
-<!--            if(kind==='throttle') keys.right = val;-->
-<!--            else if(kind==='brake') keys.left = val;-->
-<!--            else if(kind==='leanFwd') keys.up = val;-->
-<!--            else if(kind==='leanBack') keys.down = val;-->
-<!--        }-->
-<!--        function tap(kind){ if(kind==='reset') resetLevel(); }-->
-<!--        bindMobileControls();-->
-
-<!--        // Buttons-->
-<!--        ui.startBtn.onclick = ()=>{ ui.overlay.hidden=true; paused=false; };-->
-<!--        ui.resetBtn.onclick = ()=> resetLevel();-->
-<!--        ui.pauseBtn.onclick = ()=> togglePause();-->
-
-<!--        function togglePause(){ paused = !paused; toast(paused? 'Пауза' : 'Поехали!'); }-->
-
-<!--        function toast(msg){ const t=ui.toast; t.textContent=msg; t.classList.add('show'); clearTimeout(t._to); t._to=setTimeout(()=>t.classList.remove('show'), 1200); }-->
-
-<!--        // ===== Core loop =====-->
-<!--        let timeSinceStart = 0; let lastTs=performance.now()/1000;-->
-
-<!--        function resize(){-->
-<!--            W = Math.round(innerWidth * dpr); H = Math.round(innerHeight * dpr);-->
-<!--            canvas.width = W; canvas.height = H; canvas.style.width = innerWidth+'px'; canvas.style.height = innerHeight+'px';-->
-<!--        }-->
-<!--        window.addEventListener('resize', resize);-->
-<!--        resize();-->
-
-<!--        function resetLevel(){-->
-<!--            crashed=false; finished=false; timeSinceStart=0;-->
-<!--            // Place bike at start-->
-<!--            const [sx, sy] = level.points[0];-->
-<!--            bike.rear.pos.set(sx+1.4, sy-1.0); bike.rear.prev = bike.rear.pos.clone();-->
-<!--            bike.front.pos.set(sx+2.6, sy-1.0); bike.front.prev = bike.front.pos.clone();-->
-<!--            bike.seat.pos.set(sx+2.0, sy-2.1); bike.seat.prev = bike.seat.pos.clone();-->
-<!--            addConstraints();-->
-<!--            cam.x = sx; cam.y = sy-2;-->
-<!--            paused=false; ui.overlay.hidden=true; toast('Рестарт');-->
-<!--        }-->
-<!--        resetLevel();-->
-
-<!--        function worldToScreen(v){ return { x: (v.x - cam.x)*worldScale + W/2, y: (v.y - cam.y)*worldScale + H*0.6 }; }-->
-
-<!--        function integrate(){-->
-<!--            bike.rear.addForce(0, G); bike.front.addForce(0,G); bike.seat.addForce(0,G*0.6);-->
-<!--            bike.rear.integrate(dt); bike.front.integrate(dt); bike.seat.integrate(dt);-->
-<!--        }-->
-
-<!--        function applyControls(){-->
-<!--            // Leaning: small impulses on the seat to shift center of mass-->
-<!--            if(keys.up){ bike.seat.pos.x += bike.leanImpulse*dt; }-->
-<!--            if(keys.down){ bike.seat.pos.x -= bike.leanImpulse*dt; }-->
-
-<!--            // Drive: only effective if wheel is in contact-->
-<!--            const applyDrive = (wheel, dir)=>{-->
-<!--                if(!wheel.onGround) return;-->
-<!--                const t = wheel.groundTangent.clone().norm();-->
-<!--                const v = wheel.velocity();-->
-<!--                const along = v.x*t.x + v.y*t.y;-->
-<!--                // Limit top speed along the slope-->
-<!--                if(Math.abs(along) < bike.maxSlopeSpeed){-->
-<!--                    const push = (dir>0? bike.driveForce : bike.brakeForce) * dt * dir;-->
-<!--                    const dvx = t.x * push; const dvy = t.y * push;-->
-<!--                    wheel.prev.x -= dvx; wheel.prev.y -= dvy; // add forward velocity-->
-<!--                    // Small counter on seat for realism-->
-<!--                    bike.seat.prev.x += dvx*0.2; bike.seat.prev.y += dvy*0.2;-->
-<!--                }-->
-<!--            };-->
-
-<!--            if(keys.right) applyDrive(bike.rear, +1);-->
-<!--            if(keys.left)  applyDrive(bike.rear, -1);-->
-<!--        }-->
-
-<!--        function solveConstraints(){-->
-<!--            for(let k=0;k<iterations;k++){-->
-<!--                for(const c of bike.constraints) c.solve();-->
-<!--            }-->
-<!--        }-->
-
-<!--        function collideWheel(wheel){-->
-<!--            const r = wheel.radius;-->
-<!--            let bestPen = 0; let best = null; let tangent = new Vec2(1,0);-->
-<!--            const px = wheel.pos.x, py = wheel.pos.y;-->
-<!--            for(let i=0;i<level.points.length-1;i++){-->
-<!--                const [ax,ay] = level.points[i];-->
-<!--                const [bx,by] = level.points[i+1];-->
-<!--                const c = closestPointOnSegment(ax,ay,bx,by, px,py);-->
-<!--                const dx = px - c.x, dy = py - c.y; const dist = Math.hypot(dx,dy);-->
-<!--                const pen = r - dist;-->
-<!--                if(pen > bestPen){ bestPen = pen; best = { c, ax,ay,bx,by, dist, nx: dx/(dist||1), ny: dy/(dist||1) }; tangent = new Vec2(c.abx, c.aby).norm(); }-->
-<!--            }-->
-<!--            if(best && bestPen>0){-->
-<!--                // push out along normal-->
-<!--                wheel.pos.x += best.nx * bestPen; wheel.pos.y += best.ny * bestPen;-->
-<!--                // basic friction: damp velocity into tangent direction-->
-<!--                const vx = wheel.pos.x - wheel.prev.x; const vy = wheel.pos.y - wheel.prev.y;-->
-<!--                const nDotV = vx*best.nx + vy*best.ny; // remove normal component (bounceless)-->
-<!--                const tx = tangent.x, ty = tangent.y;-->
-<!--                const tDotV = vx*tx + vy*ty;-->
-<!--                const friction = 0.96; // keeps grip but allows sliding a bit-->
-<!--                const newVx = tx*(tDotV*friction) + best.nx*0.0; // discard normal velocity-->
-<!--                const newVy = ty*(tDotV*friction) + best.ny*0.0;-->
-<!--                wheel.prev.x = wheel.pos.x - newVx; wheel.prev.y = wheel.pos.y - newVy;-->
-<!--                wheel.onGround=true; wheel.groundTangent = tangent;-->
-<!--            }-->
-<!--        }-->
-
-<!--        function collideSeat(){-->
-<!--            // Crash if seat touches ground-->
-<!--            let seatHit = false;-->
-<!--            const r = bike.seat.radius;-->
-<!--            const px=bike.seat.pos.x, py=bike.seat.pos.y;-->
-<!--            for(let i=0;i<level.points.length-1;i++){-->
-<!--                const [ax,ay] = level.points[i]; const [bx,by] = level.points[i+1];-->
-<!--                const c = closestPointOnSegment(ax,ay,bx,by, px,py);-->
-<!--                const dx = px - c.x, dy = py - c.y; const dist = Math.hypot(dx,dy);-->
-<!--                if(r - dist > 0){ seatHit = true; break; }-->
-<!--            }-->
-<!--            if(seatHit){ crashed = true; paused=true; ui.statusEl.style.display='inline-block'; ui.statusEl.textContent='Падение'; toast('🏁 Упал. Нажми R для рестарта'); }-->
-<!--        }-->
-
-<!--        function updateCamera(){-->
-<!--            const cx = (bike.rear.pos.x + bike.front.pos.x)*0.5; const cy = Math.min(bike.rear.pos.y, bike.front.pos.y) - 1.0;-->
-<!--            cam.x = lerp(cam.x, cx, 0.08); cam.y = lerp(cam.y, cy, 0.08);-->
-<!--        }-->
-
-<!--        function step(){-->
-<!--            const now = performance.now()/1000; const elapsed = now - lastTs; lastTs = now;-->
-<!--            if(!paused && !crashed && !finished){ timeSinceStart += elapsed; }-->
-
-<!--            // catch-up for fixed dt-->
-<!--            let acc = elapsed;-->
-<!--            while(acc > 0){-->
-<!--                const h = Math.min(dt, acc); // substepping-->
-<!--                if(!paused && !crashed && !finished){-->
-<!--                    applyControls();-->
-<!--                    integrate();-->
-<!--                    // Collisions-->
-<!--                    collideWheel(bike.rear);-->
-<!--                    collideWheel(bike.front);-->
-<!--                    collideSeat();-->
-<!--                    // Constraints-->
-<!--                    solveConstraints();-->
-<!--                    // Finish check-->
-<!--                    if(bike.rear.pos.x >= levelLength - 0.5){ finished=true; paused=true; ui.statusEl.style.display='inline-block'; ui.statusEl.textContent='Финиш!'; toast('🎉 Финиш!'); }-->
-<!--                }-->
-<!--                acc -= h;-->
-<!--            }-->
-
-<!--            updateCamera();-->
-<!--            draw();-->
-<!--            updateHUD();-->
-<!--            requestAnimationFrame(step);-->
-<!--        }-->
-
-<!--        function updateHUD(){-->
-<!--            const v = bike.rear.velocity();-->
-<!--            const speed = Math.hypot(v.x,v.y);-->
-<!--            ui.speedEl.textContent = speed.toFixed(2);-->
-<!--            ui.timeEl.textContent = timeSinceStart.toFixed(1);-->
-<!--            const p = clamp((bike.rear.pos.x/levelLength)*100, 0, 100);-->
-<!--            ui.progressEl.textContent = Math.round(p)+'%';-->
-<!--        }-->
-
-<!--        function draw(){-->
-<!--            ctx.clearRect(0,0,W,H);-->
-<!--            // Sky gradient-->
-<!--            const g = ctx.createLinearGradient(0,0,0,H);-->
-<!--            g.addColorStop(0,'#0f172a'); g.addColorStop(1,'#020617');-->
-<!--            ctx.fillStyle=g; ctx.fillRect(0,0,W,H);-->
-
-<!--            // Grid (subtle)-->
-<!--            ctx.globalAlpha = 0.06; ctx.lineWidth = 1; ctx.strokeStyle = '#94a3b8';-->
-<!--            const gridStep = 1*worldScale; const ox = (W/2 - (cam.x*worldScale)) % gridStep; const oy = (H*0.6 - (cam.y*worldScale)) % gridStep;-->
-<!--            ctx.beginPath();-->
-<!--            for(let x=ox; x<W; x+=gridStep){ ctx.moveTo(x,0); ctx.lineTo(x,H); }-->
-<!--            for(let y=oy; y<H; y+=gridStep){ ctx.moveTo(0,y); ctx.lineTo(W,y); }-->
-<!--            ctx.stroke(); ctx.globalAlpha = 1;-->
-
-<!--            // Terrain-->
-<!--            ctx.lineWidth = Math.max(2, 2*dpr); ctx.strokeStyle = '#5eead4'; ctx.fillStyle = 'rgba(45,212,191,0.08)';-->
-<!--            ctx.beginPath();-->
-<!--            for(let i=0;i<level.points.length;i++){-->
-<!--                const p = { x: level.points[i][0], y: level.points[i][1] };-->
-<!--                const s = worldToScreen(p);-->
-<!--                if(i===0) ctx.moveTo(s.x, s.y); else ctx.lineTo(s.x, s.y);-->
-<!--            }-->
-<!--            // extend down to bottom to fill under terrain-->
-<!--            const last = worldToScreen({x:level.points[level.points.length-1][0], y:level.points[level.points.length-1][1]});-->
-<!--            ctx.lineTo(last.x, H);-->
-<!--            const first = worldToScreen({x:level.points[0][0], y:100});-->
-<!--            ctx.lineTo(first.x, H);-->
-<!--            ctx.closePath();-->
-<!--            ctx.fill();-->
-<!--            ctx.stroke();-->
-
-<!--            // Bike-->
-<!--            drawWheel(bike.rear, '#eab308');-->
-<!--            drawWheel(bike.front, '#eab308');-->
-<!--            drawChassis();-->
-
-<!--            // Status banners-->
-<!--            if(crashed||finished||paused){-->
-<!--                ctx.save();-->
-<!--                ctx.textAlign='center'; ctx.textBaseline='middle';-->
-<!--                ctx.font = `600 ${18*dpr}px system-ui, -apple-system`;-->
-<!--                ctx.fillStyle = 'rgba(0,0,0,.35)';-->
-<!--                ctx.fillRect(W/2-160, 24, 320, 34*dpr);-->
-<!--                ctx.fillStyle = '#cbd5e1';-->
-<!--                ctx.fillText(crashed? 'Упал — R для рестарта' : finished? 'Финиш! R — сыграть снова' : 'Пауза (P)', W/2, 42*dpr);-->
-<!--                ctx.restore();-->
-<!--            }-->
-<!--        }-->
-
-<!--        function drawWheel(w, color){-->
-<!--            const s = worldToScreen(w.pos);-->
-<!--            ctx.save();-->
-<!--            ctx.translate(s.x, s.y);-->
-<!--            ctx.beginPath(); ctx.arc(0,0, w.radius*worldScale, 0, Math.PI*2);-->
-<!--            ctx.fillStyle = '#0b1220'; ctx.fill(); ctx.lineWidth=2*dpr; ctx.strokeStyle=color; ctx.stroke();-->
-<!--            // spokes-->
-<!--            ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(w.radius*worldScale, 0);-->
-<!--            ctx.moveTo(0,0); ctx.lineTo(-w.radius*worldScale, 0);-->
-<!--            ctx.moveTo(0,0); ctx.lineTo(0, w.radius*worldScale);-->
-<!--            ctx.moveTo(0,0); ctx.lineTo(0,-w.radius*worldScale);-->
-<!--            ctx.globalAlpha=.6; ctx.strokeStyle=color; ctx.stroke(); ctx.globalAlpha=1;-->
-<!--            ctx.restore();-->
-<!--        }-->
-
-<!--        function drawChassis(){-->
-<!--            const r = worldToScreen(bike.rear.pos); const f = worldToScreen(bike.front.pos); const s = worldToScreen(bike.seat.pos);-->
-<!--            ctx.save();-->
-<!--            ctx.lineWidth = 3*dpr; ctx.strokeStyle = '#93c5fd';-->
-<!--            ctx.beginPath();-->
-<!--            ctx.moveTo(r.x, r.y); ctx.lineTo(s.x, s.y); ctx.lineTo(f.x, f.y); ctx.lineTo(r.x, r.y);-->
-<!--            ctx.stroke();-->
-<!--            // seat dot-->
-<!--            ctx.beginPath(); ctx.arc(s.x, s.y, 5*dpr, 0, Math.PI*2); ctx.fillStyle = '#93c5fd'; ctx.fill();-->
-<!--            ctx.restore();-->
-<!--        }-->
-
-<!--        // Start with help overlay visible for desktop-->
-<!--        ui.overlay.hidden = false;-->
-
-<!--        requestAnimationFrame(step);-->
-<!--    })();-->
-<!--</script>-->
-<!--</body>-->
+<!--    <script src="assets/app.js" defer></script>-->
+<!--  </body>-->
 <!--</html>-->
