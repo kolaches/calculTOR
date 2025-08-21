@@ -6,6 +6,13 @@ function onReady() {
   const b = document.getElementById("b");
   const result = document.getElementById("result");
 
+function multiply() {
+  const a = parseFloat(document.getElementById('a2').value);
+  const b = parseFloat(document.getElementById('b2').value);
+  const result = a * b;
+  document.getElementById('result2').innerText = isNaN(result) ? 'Ошибка' : result;
+}
+
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     try {
