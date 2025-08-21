@@ -36,7 +36,7 @@ function onReady() {
       return;
     }
     const product = multiply(valA, valB);
-    result2.textContent = `Результат: ${product}`;
+    result2.textContent = `${product}`;
   });
 }
 
