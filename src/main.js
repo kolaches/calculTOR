@@ -10,7 +10,6 @@ function onReady() {
   const b = document.getElementById("b");
   const result = document.getElementById("result");
 
-  // элементы второго калькулятора
   const a2 = document.getElementById('a2');
   const b2 = document.getElementById('b2');
   const multiplyBtn = document.getElementById('multiply-btn');
@@ -20,6 +19,9 @@ function onReady() {
     e.preventDefault();
     try {
       const sum = add(parseFloat(a.value), parseFloat(b.value));
+      if (isNaN(sum)) {
+        throw new Error("Неверные данные для сложения");
+      }
       result.textContent = `Результат: ${sum}`;
     } catch (err) {
       result.textContent = `Ошибка: ${err.message}`;
@@ -30,11 +32,11 @@ function onReady() {
     const valA = parseFloat(a2.value);
     const valB = parseFloat(b2.value);
     if (isNaN(valA) || isNaN(valB)) {
-      result2.textContent = 'Ошибка';
+      result2.textContent = 'Ошибка: введите числа';
       return;
     }
     const product = multiply(valA, valB);
-    result2.textContent = product;
+    result2.textContent = `Результат: ${product}`;
   });
 }
 
