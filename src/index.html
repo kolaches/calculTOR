@@ -1,4 +1,275 @@
 
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Моя геймерская визитка</title>
+    <!--
+      ⚙️ КАК ИСПОЛЬЗОВАТЬ
+      1) Положите свою фотографию рядом с этим файлом и замените 'your-photo.jpg' ниже.
+      2) Заполните имя, ссылки и цифры в отмеченных местах.
+      3) Нужен только HTML и CSS — никакого JS.
+    -->
+    <style>
+        :root{
+          --bg-1: #0b0f1a;
+          --bg-2: #0d0b16;
+          --text: #eaeaf3;
+          --muted: #a9adc1;
+          --accent-1: #ffae00; /* CS gold */
+          --accent-2: #c62828; /* Dota red */
+          --glass: rgba(255,255,255,.06);
+          --glass-strong: rgba(255,255,255,.12);
+          --card: rgba(12,16,30,.7);
+          --stroke: rgba(255,255,255,.12);
+          --maxw: 1100px;
+          --radius: 18px;
+          --shadow: 0 10px 30px rgba(0,0,0,.45);
+        }
+
+        *{box-sizing:border-box}
+        html,body{height:100%}
+        body{
+          margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+          color:var(--text); background: radial-gradient(1200px 800px at 70% -10%, rgba(255,174,0,.15), transparent 60%),
+                              radial-gradient(900px 600px at 10% -20%, rgba(198,40,40,.18), transparent 60%),
+                              linear-gradient(180deg, var(--bg-1), var(--bg-2));
+          background-attachment: fixed;
+        }
+
+        /* декоративные неоновые пятна */
+        .orbs::before, .orbs::after{
+          content:""; position:fixed; inset:0; pointer-events:none; mix-blend-mode:screen; opacity:.35;
+          background: radial-gradient(600px 300px at 85% 15%, rgba(255,174,0,.25), transparent 55%);
+          filter: blur(20px);
+        }
+        .orbs::after{background: radial-gradient(800px 350px at 15% 10%, rgba(198,40,40,.28), transparent 60%);
+        }
+
+        /* лёгкие сканлайны для игрового вайба */
+        .scanlines{position:fixed; inset:0; pointer-events:none; opacity:.08;
+          background-image: repeating-linear-gradient( to bottom, rgba(255,255,255,.12), rgba(255,255,255,.12) 1px, transparent 1px, transparent 3px);
+        }
+
+        header{
+          position:sticky; top:0; z-index:2; backdrop-filter: blur(8px);
+          background: linear-gradient(to bottom, rgba(10,12,22,.8), rgba(10,12,22,.35));
+          border-bottom: 1px solid var(--stroke);
+        }
+
+        .nav{max-width:var(--maxw); margin:0 auto; padding:14px 22px; display:flex; align-items:center; justify-content:space-between;}
+        .brand{display:flex; gap:12px; align-items:center; font-weight:700; letter-spacing:.4px}
+
+        /* минималистичный логотип — прицел + щит */
+        .mark{width:34px; height:34px; position:relative; border-radius:10px;
+          background: radial-gradient(circle at 50% 50%, rgba(255,174,0,.25), rgba(255,174,0,.05) 45%, transparent 46%),
+                      linear-gradient(135deg, rgba(198,40,40,.45), rgba(255,174,0,.45));
+          box-shadow: inset 0 0 0 2px rgba(255,255,255,.12), 0 6px 18px rgba(0,0,0,.3);
+        }
+        .mark:before,.mark:after{content:""; position:absolute; inset:0; margin:auto; border-radius:50%;}
+        .mark:before{width:22px;height:22px;border:2px solid rgba(255,255,255,.8); filter: drop-shadow(0 0 6px rgba(255,174,0,.6));}
+        .mark:after{width:2px;height:70%; background:rgba(255,255,255,.85); box-shadow: 0 0 6px rgba(255,174,0,.7), 0 0 0 2px transparent;}
+        .brand .title{font-size:15px; line-height:1.1}
+        .brand .sub{display:block; font-weight:500; color:var(--muted); font-size:12px; margin-top:2px}
+
+        .links{display:flex; gap:12px; align-items:center; flex-wrap:wrap}
+        .pill{--glow:var(--accent-1); padding:8px 12px; border-radius:999px; font-size:14px; text-decoration:none; color:var(--text);
+          background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+          border:1px solid var(--stroke);
+          box-shadow: inset 0 0 18px rgba(255,255,255,.05), 0 0 14px rgba(255,174,0,.15);
+          transition: .2s ease;
+        }
+        .pill:hover{transform: translateY(-1px); box-shadow: 0 0 24px var(--glow), inset 0 0 18px rgba(255,255,255,.05)}
+        .pill[data-variant="red"]{--glow:var(--accent-2)}
+
+        main{max-width:var(--maxw); margin:0 auto; padding:48px 22px 80px}
+
+        .hero{display:grid; grid-template-columns: 1.1fr 1.3fr; gap:28px; align-items:center}
+
+        /* аватар с геймерским декором */
+        .avatar-wrap{position:relative; aspect-ratio: 1/1; max-width: 420px; justify-self:center}
+        .avatar{
+          position:relative; width:100%; height:100%; border-radius:28px;
+          background-image: url('your-photo.jpg'); /* ← замените на файл с вашей фотографией */
+          background-size: cover; background-position:center;
+          box-shadow: var(--shadow), 0 0 0 2px rgba(255,255,255,.08) inset;
+          overflow:hidden;
+          border: 1px solid var(--stroke);
+          isolation:isolate;
+        }
+        /* перекрёстие */
+        .avatar::after{content:""; position:absolute; inset:0; margin:auto; width:70%; height:70%; border-radius:50%;
+          border:2px solid rgba(255,255,255,.9); box-shadow:0 0 18px rgba(255,174,0,.6);
+          animation: pulse 2.4s ease-in-out infinite;
+        }
+        .avatar::before{content:""; position:absolute; inset:0; margin:auto; width:2px; height:85%; background:rgba(255,255,255,.9);
+          box-shadow: 0 0 12px rgba(255,174,0,.7);
+        }
+        @keyframes pulse{0%,100%{transform:scale(.98); opacity:.9}50%{transform:scale(1.02); opacity:1}}
+
+        .badge-live{position:absolute; top:14px; left:14px; padding:6px 10px; font-size:12px; font-weight:700; letter-spacing:.4px; text-transform:uppercase;
+          background: linear-gradient(90deg, var(--accent-2), #e44);
+          border:1px solid rgba(255,255,255,.15); border-radius:999px; box-shadow:0 0 18px rgba(198,40,40,.6);
+        }
+
+        .glow-border{position:absolute; inset:-1px; border-radius:28px; pointer-events:none;
+          --grad: conic-gradient(from 0deg at 50% 50%, var(--accent-1), var(--accent-2), var(--accent-1));
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          padding:2px; background:var(--grad);
+          -webkit-mask-composite: xor; mask-composite: exclude; filter: blur(6px) saturate(1.2); opacity:.6;
+          animation: rotate 6s linear infinite;
+        }
+        @keyframes rotate {to{transform: rotate(360deg)}}
+
+        .hero-copy h1{font-size: clamp(28px, 4vw, 46px); margin:0 0 10px; text-wrap:balance;
+          text-shadow: 0 0 24px rgba(255,174,0,.3), 0 0 24px rgba(198,40,40,.25);
+        }
+        .hero-copy p.lead{margin:0 0 18px; color:var(--muted); font-size: clamp(14px, 2.1vw, 18px)}
+
+        .tags{display:flex; gap:10px; flex-wrap:wrap; margin:14px 0 22px}
+        .tag{font-size:12px; text-transform:uppercase; letter-spacing:.5px; padding:7px 10px; border-radius:999px;
+          background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+          border:1px solid var(--stroke);
+        }
+        .tag[data-variant="gold"]{border-color: rgba(255,174,0,.55); box-shadow: inset 0 0 18px rgba(255,174,0,.12)}
+        .tag[data-variant="red"]{border-color: rgba(198,40,40,.55); box-shadow: inset 0 0 18px rgba(198,40,40,.12)}
+
+        .cta{display:flex; gap:12px; flex-wrap:wrap}
+        .btn{--glow: var(--accent-1); padding:12px 16px; border-radius:12px; border:1px solid var(--stroke); color:var(--text); text-decoration:none; font-weight:600;
+          background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)); box-shadow: 0 10px 22px rgba(0,0,0,.3);
+          transition: .22s ease;
+        }
+        .btn:hover{transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,0,0,.38), 0 0 24px var(--glow)}
+        .btn[data-variant="secondary"]{--glow: var(--accent-2)}
+
+        section{margin-top:48px}
+        .section-title{display:flex; align-items:center; gap:10px; margin:0 0 16px; font-size:14px; text-transform:uppercase; letter-spacing:.5px; color:var(--muted)}
+        .bar{width:44px; height:2px; background: linear-gradient(90deg, var(--accent-1), var(--accent-2)); border-radius:2px}
+
+        .about, .setup, .contact{background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); border:1px solid var(--stroke); border-radius:var(--radius); padding:22px; box-shadow: var(--shadow)}
+
+        .about p{margin:0; color:var(--text); line-height:1.7}
+
+        .stats{display:grid; grid-template-columns: repeat(4, 1fr); gap:16px}
+        .card{background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); border:1px solid var(--stroke); border-radius:14px; padding:16px; box-shadow: var(--shadow)}
+        .num{font-size:28px; font-weight:800; margin-bottom:4px}
+        .mut{color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.4px}
+
+        .setup-grid{display:grid; grid-template-columns: repeat(3, 1fr); gap:14px}
+        .li{padding:14px; border:1px solid var(--stroke); border-radius:12px; background: rgba(255,255,255,.03)}
+        .li b{display:block; margin-bottom:6px}
+
+        .contact .rows{display:grid; gap:10px}
+        .contact a{color:var(--text)}
+
+        footer{max-width:var(--maxw); margin:28px auto 80px; padding:0 22px; color:var(--muted); font-size:13px}
+
+        /* адаптив */
+        @media (max-width: 980px){
+          .hero{grid-template-columns: 1fr; gap:22px}
+          .avatar-wrap{max-width: 380px}
+          .stats{grid-template-columns: repeat(2, 1fr)}
+          .setup-grid{grid-template-columns: repeat(2, 1fr)}
+        }
+        @media (max-width: 560px){
+          .stats{grid-template-columns: 1fr}
+          .setup-grid{grid-template-columns: 1fr}
+          .links{display:none}
+        }
+    </style>
+</head>
+<body>
+<div class="orbs"></div>
+<div class="scanlines"></div>
+<header>
+    <div class="nav">
+        <div class="brand">
+            <div class="mark" aria-hidden="true"></div>
+            <div class="title-wrap">
+                <div class="title">Ваш Никнейм</div>
+                <span class="sub">CS & Dota игрок</span>
+            </div>
+        </div>
+        <nav class="links" aria-label="Социальные ссылки">
+            <!-- Замените # на ваши ссылки -->
+            <a class="pill" href="#" target="_blank" rel="noopener">🎮 Steam</a>
+            <a class="pill" data-variant="red" href="#" target="_blank" rel="noopener">📺 Twitch</a>
+            <a class="pill" href="#" target="_blank" rel="noopener">💬 Discord</a>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <section class="hero">
+        <div class="avatar-wrap">
+            <div class="avatar" role="img" aria-label="Фотография игрока">
+                <div class="badge-live">online</div>
+            </div>
+            <div class="glow-border"></div>
+        </div>
+
+        <div class="hero-copy">
+            <h1>Привет! Я <span style="color:var(--accent-1)">Ваше Имя</span> — живу игрой.</h1>
+            <p class="lead">Много играю в <b>Counter‑Strike</b> и <b>Dota 2</b>. Люблю жёсткий клатч, командную тактику и чистую коммуникацию. Ищу единомышленников для стаков, миксов и совместных проектов.</p>
+
+            <div class="tags">
+                <span class="tag" data-variant="gold">AWP / Rifler</span>
+                <span class="tag" data-variant="red">Support / Roaming</span>
+                <span class="tag">Shotcaller</span>
+                <span class="tag">RU / EN</span>
+            </div>
+
+            <div class="cta">
+                <a class="btn" href="#contact">Связаться</a>
+                <a class="btn" data-variant="secondary" href="#setup">Мой сетап</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="about" aria-labelledby="about-title">
+        <div class="section-title"><span class="bar"></span><span id="about-title">Обо мне</span></div>
+        <p>Коротко о главном: дисциплина, уважение к тиммейтам и постоянный гринд. <br/>Играю с 2014 года, люблю анализ демок и строить плейбуки под команду. В свободное время помогаю друзьям настраивать прицелы, сенсу и бинды.</p>
+    </section>
+
+    <section class="stats" aria-labelledby="stats-title">
+        <div class="section-title" style="grid-column:1/-1"><span class="bar"></span><span id="stats-title">Статистика</span></div>
+        <!-- Замените показатели на свои реальные -->
+        <div class="card"><div class="num">3 200+</div><div class="mut">часы в CS</div></div>
+        <div class="card"><div class="num">4 600</div><div class="mut">MMR Dota 2</div></div>
+        <div class="card"><div class="num">1.18</div><div class="mut">K/D (CS)</div></div>
+        <div class="card"><div class="num">57%</div><div class="mut">Winrate (посл. 100)</div></div>
+    </section>
+
+    <section id="setup" class="setup" aria-labelledby="setup-title">
+        <div class="section-title"><span class="bar"></span><span id="setup-title">Сетап</span></div>
+        <div class="setup-grid">
+            <div class="li"><b>Мышь</b> Logitech G Pro X Superlight</div>
+            <div class="li"><b>Клава</b> SteelSeries Apex Pro</div>
+            <div class="li"><b>Гарнитура</b> HyperX Cloud II</div>
+            <div class="li"><b>Монитор</b> 24" 240 Гц</div>
+            <div class="li"><b>Микрофон</b> FIFINE / Blue</div>
+            <div class="li"><b>Пад</b> Artisan / Zowie G‑SR</div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact" aria-labelledby="contact-title">
+        <div class="section-title"><span class="bar"></span><span id="contact-title">Контакты</span></div>
+        <div class="rows">
+            <!-- Обновите контакты под себя -->
+            <div>📨 Email: <a href="mailto:you@example.com">you@example.com</a></div>
+            <div>🎮 Steam: <a href="#" target="_blank" rel="noopener">steamcommunity.com/id/ваш_ид</a></div>
+            <div>💬 Discord: <span>nickname#0001</span></div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    © <span id="y">2025</span> Ваш Никнейм — GGWP ✨
+</footer>
+</body>
+</html>
 
 
 <!--<!doctype html>-->
